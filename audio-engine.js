@@ -1,3 +1,10 @@
+const SOUND_PROFILE = Object.freeze({
+  kick: { frequency: 110, endFrequency: 42, duration: 0.39, wave: 'sine' },
+  snare: { frequency: 210, duration: 0.13, wave: 'triangle' },
+  hat: { frequency: 760, duration: 0.08, wave: 'square' },
+  clap: { frequency: 310, duration: 0.13, wave: 'sawtooth' }
+});
+
 export class AudioEngine {
   constructor(audioContextFactory = () => new AudioContext()) {
     this.audioContextFactory = audioContextFactory;
@@ -11,19 +18,22 @@ export class AudioEngine {
 
   play(sound) {
     const context = this.getContext();
+    const profile = SOUND_PROFILE[sound];
+    if (!profile) return false;
     if (context.state === 'suspended') context.resume();
     const gain = context.createGain();
     gain.connect(context.destination);
     const now = context.currentTime;
     gain.gain.setValueAtTime(0.22, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + (sound === 'kick' ? 0.38 : 0.12));
+    gain.gain.exponentialRampToValueAtTime(0.001, now + profile.duration);
     const oscillator = context.createOscillator();
     oscillator.connect(gain);
-    oscillator.type = sound === 'hat' ? 'square' : 'sine';
-    oscillator.frequency.setValueAtTime(sound === 'kick' ? 110 : sound === 'snare' ? 210 : sound === 'hat' ? 760 : 310, now);
-    if (sound === 'kick') oscillator.frequency.exponentialRampToValueAtTime(42, now + 0.15);
+    oscillator.type = profile.wave;
+    oscillator.frequency.setValueAtTime(profile.frequency, now);
+    if (profile.endFrequency) oscillator.frequency.exponentialRampToValueAtTime(profile.endFrequency, now + 0.15);
     oscillator.start(now);
-    oscillator.stop(now + (sound === 'kick' ? 0.39 : 0.13));
+    oscillator.stop(now + profile.duration);
+    return true;
   }
 }
 

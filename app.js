@@ -5,4 +5,5 @@ import { initEventHub } from './event-hub.js';
 
 initPortfolio(document);
 initDrumKit(document);
-initEventHub(document, { targetUtc: '2026-12-14T12:00:00Z' });
+const eventSection = document.querySelector('#events');
+initEventHub(document, { targetUtc: eventSection?.dataset.targetUtc });

@@ -20,7 +20,14 @@ export function initDrumKit(root) {
   }
   function renderEvents(events) { eventList.replaceChildren(...events.map(({ sound, at }) => { const item = document.createElement('li'); item.textContent = `${String(at).padStart(4, '0')} ms - ${sound}`; return item; })); }
   pads.forEach((pad) => pad.addEventListener('click', () => hit(pad)));
-  window.addEventListener('keydown', (event) => { const key = event.key.toLowerCase(); const pad = byKey.get(key); if (pad && gate.press(key)) { event.preventDefault(); hit(pad); } });
+  window.addEventListener('keydown', (event) => {
+    const key = event.key.toLowerCase();
+    const pad = byKey.get(key);
+    // Browsers set repeat while a key is held; one physical press maps to one hit.
+    if (!pad || event.repeat || !gate.press(key)) return;
+    event.preventDefault();
+    hit(pad);
+  });
   window.addEventListener('keyup', (event) => gate.release(event.key.toLowerCase()));
   toggle.addEventListener('click', () => {
     if (!recorder.isRecording) { recorder.start(); toggle.textContent = 'Stop recording'; status.textContent = 'Recording pad timestamps…'; eventList.replaceChildren(); }

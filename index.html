@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Accessible web engineering portfolio, audio drum kit, and resilient event hub." />
+    <title>Signal & Sound | Web Engineering Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Signal and Sound home">S/S</a>
+      <nav aria-label="Primary navigation">
+        <a href="#work">Work</a>
+        <a href="#drum-kit">Drum kit</a>
+        <a href="#events">Events</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section id="top" class="hero" aria-labelledby="hero-title">
+        <p class="eyebrow">Web application development</p>
+        <h1 id="hero-title">Built with intent.<br /><em>Tested in the details.</em></h1>
+        <p class="lede">A compact portfolio showing accessible interfaces, browser audio, and resilient event interactions.</p>
+        <a class="button button-primary" href="#work">Explore the work <span aria-hidden="true">↓</span></a>
+      </section>
+
+      <section id="work" class="section" aria-labelledby="work-title">
+        <div class="section-heading"><p class="eyebrow">HW1 / Portfolio</p><h2 id="work-title">Selected work</h2></div>
+        <div class="project-grid">
+          <article class="project-card"><p class="project-number">01</p><h3>Local Form</h3><p>Clear, keyboard-first intake experience for a neighborhood studio.</p><button class="text-button" type="button" data-project="Local Form">Read case study <span aria-hidden="true">↗</span></button></article>
+          <article class="project-card project-card-featured"><p class="project-number">02</p><h3>Quiet Signal</h3><p>Editorial dashboard that makes dense service data readable at a glance.</p><button class="text-button" type="button" data-project="Quiet Signal">Read case study <span aria-hidden="true">↗</span></button></article>
+          <article class="project-card"><p class="project-number">03</p><h3>Common Thread</h3><p>Identity and ecommerce surface that honors customer preferences.</p><button class="text-button" type="button" data-project="Common Thread">Read case study <span aria-hidden="true">↗</span></button></article>
+        </div>
+      </section>
+
+      <dialog id="project-dialog" aria-labelledby="dialog-title">
+        <button class="icon-button" type="button" data-close-dialog aria-label="Close case study">×</button>
+        <p class="eyebrow">Case study</p><h2 id="dialog-title">Project</h2>
+        <p id="dialog-copy">A concise project summary.</p>
+        <button class="button button-primary" type="button" data-close-dialog>Back to work</button>
+      </dialog>
+
+      <section id="drum-kit" class="section drum-section" aria-labelledby="drum-title">
+        <div class="section-heading"><p class="eyebrow">HW2 / Contract-first audio</p><h2 id="drum-title">Drum kit engine</h2></div>
+        <p class="section-intro">Play with the keys below or tap a pad. Multiple pads can sound together.</p>
+        <div class="drum-layout">
+          <div class="drum-machine" aria-label="Drum pads">
+            <button class="drum-pad pad-kick" type="button" data-sound="kick" data-key="a"><span>Kick</span><kbd>A</kbd></button>
+            <button class="drum-pad pad-snare" type="button" data-sound="snare" data-key="s"><span>Snare</span><kbd>S</kbd></button>
+            <button class="drum-pad pad-hat" type="button" data-sound="hat" data-key="d"><span>Hi-hat</span><kbd>D</kbd></button>
+            <button class="drum-pad pad-clap" type="button" data-sound="clap" data-key="f"><span>Clap</span><kbd>F</kbd></button>
+          </div>
+          <aside class="recorder" aria-labelledby="recorder-title"><p class="eyebrow">Take 01</p><h3 id="recorder-title">Beat recorder</h3><p id="recorder-status" aria-live="polite">Ready to record.</p><div class="recorder-actions"><button class="button button-primary" type="button" id="record-toggle">Start recording</button><button class="button button-secondary" type="button" id="play-take" disabled>Play take</button></div><ol id="beat-events" class="beat-events" aria-label="Recorded beat events"></ol></aside>
+        </div>
+      </section>
+
+      <section id="events" class="section event-section" aria-labelledby="events-title">
+        <div class="section-heading"><p class="eyebrow">HW3 / Resilient landing</p><h2 id="events-title">Small rooms. Big signal.</h2></div>
+        <div class="event-grid"><div><p class="section-intro">An intimate program for people who make the web feel more human.</p><p class="event-date">14 DEC 2026 · 19:00 ICT</p><p class="countdown" id="countdown" aria-live="polite">Loading countdown…</p></div><form id="rsvp-form" novalidate><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required maxlength="80" /><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254" /><button class="button button-primary" type="submit">Reserve a seat</button><p class="form-status" id="form-status" aria-live="polite"></p></form></div>
+      </section>
+    </main>
+    <footer><span>Signal & Sound</span><span>Made for Web Application Development</span></footer>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

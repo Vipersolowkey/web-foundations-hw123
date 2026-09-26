@@ -38,10 +38,12 @@ export class AudioEngine {
 }
 
 export class BeatRecorder {
-  constructor(clock = () => performance.now()) { this.clock = clock; this.events = []; this.startedAt = 0; this.isRecording = false; }
-  start() { this.events = []; this.startedAt = this.clock(); this.isRecording = true; }
-  stop() { this.isRecording = false; return [...this.events]; }
-  add(sound) { if (!this.isRecording) return; this.events.push({ sound, at: Math.round(this.clock() - this.startedAt) }); }
+  constructor(clock = () => performance.now()) { this.clock = clock; this.queue = []; this.startedAt = 0; this.isRecording = false; }
+  get events() { return [...this.queue]; }
+  start() { this.queue = []; this.startedAt = this.clock(); this.isRecording = true; }
+  stop() { this.isRecording = false; return this.events; }
+  add(sound) { if (!this.isRecording) return; this.queue.push({ sound, at: Math.round(this.clock() - this.startedAt) }); }
+  dequeue() { return this.queue.shift() || null; }
 }
 
 export class RepeatGate {

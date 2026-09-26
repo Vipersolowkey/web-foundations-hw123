@@ -9,12 +9,15 @@ export function canTransition(from, to) { return ALLOWED_TRANSITIONS[from]?.incl
 
 export function millisecondsUntil(targetUtc, now = Date.now()) { return Math.max(0, new Date(targetUtc).getTime() - now); }
 export function formatCountdown(milliseconds) { const seconds = Math.floor(milliseconds / 1000); const days = Math.floor(seconds / 86400); const hours = Math.floor((seconds % 86400) / 3600); const minutes = Math.floor((seconds % 3600) / 60); return `${String(days).padStart(2, '0')}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`; }
+export function normalizeText(value, maxLength) { return String(value).trim().replace(/\s+/g, ' ').slice(0, maxLength); }
 
 export function initEventHub(root, { targetUtc }) {
   const countdown = root.querySelector('#countdown');
   const form = root.querySelector('#rsvp-form');
   if (!countdown || !form) return;
   const status = root.querySelector('#form-status');
+  const nameInput = form.elements.name;
+  const emailInput = form.elements.email;
   let state = FormState.IDLE;
   function setState(next) {
     if (!canTransition(state, next)) return false;
@@ -27,6 +30,8 @@ export function initEventHub(root, { targetUtc }) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     if (state === FormState.SUBMITTING) return;
+    nameInput.value = normalizeText(nameInput.value, 80);
+    emailInput.value = normalizeText(emailInput.value, 254);
     if (!form.checkValidity()) { setState(FormState.ERROR); status.textContent = 'Please enter a valid name and email address.'; form.reportValidity(); return; }
     setState(FormState.SUBMITTING);
     const submit = form.querySelector('[type="submit"]'); submit.disabled = true; status.textContent = 'Reserving your seat…';

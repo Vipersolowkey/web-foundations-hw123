@@ -5,13 +5,12 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen import canvas
-from textwrap import wrap
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'output' / 'pdf'
 SHOT = ROOT / 'output' / 'screenshots' / 'product-full.png'
 REPO = 'https://github.com/Vipersolowkey/web-foundations-hw123'
-AI_LINK = 'Add your ChatGPT/Codex shared-conversation URL before submitting.'
+AI_LINK = 'https://chatgpt.com/s/cx_6ab7625b15d081918d5076d559b0da87'
 W, H = A4
 M = 46
 INK = HexColor('#12211f')
@@ -22,7 +21,7 @@ LIME = HexColor('#d8ff57')
 def text(c, value, x, y, size=10, font='Helvetica', color=INK):
     c.setFont(font, size); c.setFillColor(color); c.drawString(x, y, value)
 
-def footer(c, page, total=6):
+def footer(c, page, total=4):
     c.setStrokeColor(HexColor('#c9c5bd')); c.line(M, 32, W-M, 32)
     text(c, 'Web Application Development - HW1, HW2, HW3', M, 19, 7, color=HexColor('#5a625e'))
     text(c, f'{page} / {total}', W-M-22, 19, 7, color=HexColor('#5a625e'))
@@ -47,22 +46,6 @@ def screenshot_page(c, image, top, bottom, title, caption, page):
     x, y = (W-draw_w)/2, 60
     c.setStrokeColor(HexColor('#c9c5bd')); c.rect(x-2, y-2, draw_w+4, draw_h+4, fill=0)
     c.drawImage(ImageReader(crop_path), x, y, draw_w, draw_h)
-    link(c, 'Repository: github.com/Vipersolowkey/web-foundations-hw123', REPO, M, 43, 7, HexColor('#23536b'))
-    footer(c, page)
-
-def prompt_page(c, prompts, page):
-    c.setFillColor(PAPER); c.rect(0, 0, W, H, fill=1, stroke=0)
-    text(c, 'AI assistance prompt log', M, H-48, 21, 'Helvetica-Bold')
-    text(c, 'Reconstructed prompts for submission documentation - not a verbatim chat export.', M, H-66, 8.5, color=HexColor('#5a625e'))
-    y = H - 104
-    for number, title, prompt in prompts:
-        text(c, f'{number:02d}', M, y, 9, 'Helvetica-Bold', CORAL)
-        text(c, title, M+30, y, 12, 'Helvetica-Bold')
-        y -= 19
-        for line in wrap(prompt, 92):
-            text(c, line, M+30, y, 8.2, color=HexColor('#273632'))
-            y -= 13
-        y -= 18
     link(c, 'Repository: github.com/Vipersolowkey/web-foundations-hw123', REPO, M, 43, 7, HexColor('#23536b'))
     footer(c, page)
 
@@ -93,25 +76,14 @@ def main():
     for item in items:
         text(c, u'•', M, y, 11, color=CORAL); text(c, item, M+14, y, 9); y -= 25
     text(c, 'AI conversation link', M, 184, 10, 'Helvetica-Bold')
-    text(c, AI_LINK, M, 164, 8.5, color=CORAL)
-    text(c, 'Reason: a share URL is created only by the chat-account owner; it cannot be generated from this workspace.', M, 148, 8, color=HexColor('#5a625e'))
-    text(c, 'Prompt log and failure audit are attached on pages 2-3; add your Share URL before upload.', M, 127, 8, 'Helvetica-Bold')
+    link(c, 'chatgpt.com/s/cx_6ab7625b15d081918d5076d559b0da87', AI_LINK, M, 164, 8, CORAL)
+    text(c, 'Shared AI conversation supplied by the submitter.', M, 145, 8, color=HexColor('#5a625e'))
+    text(c, 'The repository also contains AI_USAGE.md and AI_FAILURE_AUDIT.md.', M, 127, 8, 'Helvetica-Bold')
     footer(c, 1); c.showPage()
-    prompts = [
-        (1, 'HW1 - portfolio foundation', 'Build a one-page production portfolio with semantic HTML, external CSS, modular JavaScript, native controls, a skip link, visible keyboard focus, three project cards, and an accessible case-study modal. Do not use inline handlers or runtime dependencies, and keep it responsive from 375px upward.'),
-        (2, 'HW1 - accessibility and security review', 'Review the portfolio for WCAG 2.2 AA. Make the dialog announce its title and description, move focus into it, trap Tab and Shift+Tab, restore focus to its opener, and recommend a strict CSP that works without inline JavaScript. Identify reduced-motion and responsiveness checks.'),
-        (3, 'HW2 - contract-first drum kit', 'Design the data contract before JavaScript: each native drum button needs data-sound and a unique lowercase data-key. Create a polyphonic Web Audio engine, support pointer and keyboard input, prevent held-key repeats, and describe a small testable recorder API that stores timestamped beats in FIFO order.')
-    ]
-    prompt_page(c, prompts, 2); c.showPage()
-    prompts = [
-        (4, 'HW3 - resilient event form', 'Implement a countdown from an explicit ISO 8601 UTC timestamp, not a browser-local date string. Model the RSVP flow as idle, submitting, success, and error; validate input, prevent double submits, and write status messages through textContent rather than innerHTML. Keep tests deterministic.'),
-        (5, 'AI failure-mode audit', 'Critically review generated code and document three plausible AI defects: time-zone parsing, unsafe DOM rendering, and keyboard auto-repeat. For each defect, provide a diagnosis method, a refactored solution, and a concrete verification step. Keep the report suitable for a live defense and do not invent external integrations.')
-    ]
-    prompt_page(c, prompts, 3); c.showPage()
     with Image.open(SHOT) as shot: h = shot.height
-    screenshot_page(c, SHOT, 0, h//3, 'Product evidence - HW1', 'Semantic project portfolio and accessible case-study controls.', 4); c.showPage()
-    screenshot_page(c, SHOT, h//3, 2*h//3, 'Product evidence - HW2', 'Contract-first Drum Kit with keyboard bindings and recorder panel.', 5); c.showPage()
-    screenshot_page(c, SHOT, 2*h//3, h, 'Product evidence - HW3', 'UTC countdown and guarded RSVP state-machine form.', 6); c.showPage()
+    screenshot_page(c, SHOT, 0, h//3, 'Product evidence - HW1', 'Semantic project portfolio and accessible case-study controls.', 2); c.showPage()
+    screenshot_page(c, SHOT, h//3, 2*h//3, 'Product evidence - HW2', 'Contract-first Drum Kit with keyboard bindings and recorder panel.', 3); c.showPage()
+    screenshot_page(c, SHOT, 2*h//3, h, 'Product evidence - HW3', 'UTC countdown and guarded RSVP state-machine form.', 4); c.showPage()
     c.save()
     for path in OUT.glob('_panel_*.png'): path.unlink()
     print(target)

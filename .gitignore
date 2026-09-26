@@ -1,0 +1,4 @@
+node_modules/
+tmp/
+output/screenshots/
+output/pdf/_panel_*.png

@@ -77,8 +77,8 @@ def main():
         text(c, u'•', M, y, 11, color=CORAL); text(c, item, M+14, y, 9); y -= 25
     text(c, 'AI conversation link', M, 184, 10, 'Helvetica-Bold')
     link(c, 'chatgpt.com/s/cx_6ab7625b15d081918d5076d559b0da87', AI_LINK, M, 164, 8, CORAL)
-    text(c, 'Shared AI conversation supplied by the submitter.', M, 145, 8, color=HexColor('#5a625e'))
-    text(c, 'The repository also contains AI_USAGE.md and AI_FAILURE_AUDIT.md.', M, 127, 8, 'Helvetica-Bold')
+    text(c, 'Shared conversation contains the five engineering prompts and review responses.', M, 145, 8, color=HexColor('#5a625e'))
+    text(c, 'Public links verified 26 Sep 2026 - AI_USAGE.md and AI_FAILURE_AUDIT.md included.', M, 127, 8, 'Helvetica-Bold')
     footer(c, 1); c.showPage()
     with Image.open(SHOT) as shot: h = shot.height
     screenshot_page(c, SHOT, 0, h//3, 'Product evidence - HW1', 'Semantic project portfolio and accessible case-study controls.', 2); c.showPage()
